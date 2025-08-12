@@ -38,6 +38,14 @@ You can test the model by sending some inferences to it:
 oc port-forward $(oc get pods -o name | grep phi3) 8080:8080
 ```
 
+prompt.py is a python script included in this repository for sending chat/completions requests to your deployed model.
+
+To run prompt.py, make sure the requests library is installed:
+
+```bash
+pip install requests
+````
+
 Then, in a new terminal tab:
 ```bash
 python3 prompt.py --url http://localhost:8080/v1/chat/completions --model phi3 --message "Hi, can you tell me about yourself?"
@@ -53,7 +61,7 @@ for file in guardrails/*.yaml; oc apply -f $file
 ```
 
 ### 4.1 Deploy the Hateful And Profane (HAP) language detector
-This will use IBM's [Granite-Guadrian-HAP-38m](https://huggingface.co/ibm-granite/granite-guardian-hap-38m) model, which is a small
+This will use IBM's [Granite-Guardian-HAP-38m](https://huggingface.co/ibm-granite/granite-guardian-hap-38m) model, which is a small
 language model for detecting problematic speech.
 ```bash
 oc apply -f guardrails/hap_detector/hap_model_container.yaml
@@ -242,7 +250,7 @@ Orange juice is generally considered good, especially when it's freshly squeezed
 
 ### Guardrails, `/all` endpoint:
 ```bash
-python3 prompt.py \ 
+python3 prompt.py \
   --url $GUARDRAILS_GATEWAY/all/v1/chat/completions \
   --model phi3 \
   --message "Is orange juice good?"
